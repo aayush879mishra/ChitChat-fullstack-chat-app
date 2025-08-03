@@ -53,7 +53,7 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
-    subscribeToMessages: (callback) => {
+    subscribeToMessages: () => {
         const {selectedUser} = get()
         if (!selectedUser) return;
 
