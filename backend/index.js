@@ -77,16 +77,19 @@ app.use(
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
-// ✅ Optional: handle unknown API routes with 404
-app.all('/api/*', (req, res) => {
-  res.status(404).json({ message: 'API route not found' });
+// Optional: handle unknown API routes with 404
+app.all('/api/*splat', (req, res) => {
+    // The 'splat' parameter will contain the rest of the URL path
+    // For example, if the path is '/api/users/123', req.params.splat would be 'users/123'
+    console.log(`Unmatched API path: ${req.params.splat}`);
+    res.status(404).json({ message: 'API route not found' });
 });
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-  // ✅ This handles SPA routes properly (not malformed)
+  // This handles SPA routes properly (not malformed)
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'));
   });
@@ -94,7 +97,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Start the server
 server.listen(port, () => {
-  console.log(`✅ App running on PORT ${port}`);
+  console.log(`App running on PORT ${port}`);
   connectDB();
 });
 
