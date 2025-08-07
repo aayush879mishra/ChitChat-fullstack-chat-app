@@ -68,7 +68,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Update this to your frontend domain on Render
+    origin: 'http://localhost:5173', 
     credentials: true,
   })
 );
@@ -77,11 +77,8 @@ app.use(
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
-// Optional: handle unknown API routes with 404
-app.all('/api/*splat', (req, res) => {
-    // The 'splat' parameter will contain the rest of the URL path
-    // For example, if the path is '/api/users/123', req.params.splat would be 'users/123'
-    console.log(`Unmatched API path: ${req.params.splat}`);
+app.all('/api/*', (req, res) => {
+    console.log(`Unmatched API path: ${req.originalUrl}`);
     res.status(404).json({ message: 'API route not found' });
 });
 
